@@ -2,6 +2,8 @@ import json
 import ssl
 import urllib.request
 from django.conf import settings
+from urllib.error import HTTPError, URLError
+
 
 def call_jsonrpc_method(url, method, params=None):
     if params is None:
@@ -33,7 +35,7 @@ def call_jsonrpc_method(url, method, params=None):
         with urllib.request.urlopen(req, context=context) as response:
             response_data = response.read().decode('utf-8')
             return json.loads(response_data)
-    except urllib.error.HTTPError as e:
+    except HTTPError as e:
         return {'error': str(e)}
-    except urllib.error.URLError as e:
+    except URLError as e:
         return {'error': str(e)}
